@@ -23,13 +23,6 @@ variable "app_name" {
   type        = string
   default     = "parks_reso-public"
 }
-
-variable "domain_name" {
-  description = "Domain name for CloudFront distribution"
-  type        = string
-  default     = "dev.parks-reso-public.com"
-}
-
 variable "s3_bucket" {
   description = "S3 Bucket containing static web files for CloudFront distribution"
   type        = string
@@ -47,7 +40,6 @@ variable "s3_origin_id" {
   type        = string
   default     = "parks-public-s3-origin"
 }
-
 variable "budget_amount" {
   description = "The amount of spend for the budget. Example: enter 100 to represent $100"
   default     = "100.0"
@@ -64,14 +56,12 @@ variable "common_tags" {
     Application = "BC Parks Day Pass Public"
   }
 }
-
-variable "service_names" {
-  description = "List of service names to use as subdomains"
-  default     = ["parks-reso-public"]
-  type        = list(string)
-}
-
 variable "app_version" {
   description = "app version to deploy"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Domain name for CloudFront distribution"
   type        = string
 }
