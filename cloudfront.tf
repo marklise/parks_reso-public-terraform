@@ -1,6 +1,6 @@
 #Public site - bucket containing the static files to serve out
 resource "aws_s3_bucket" "bcgov-parks-reso-public" {
-  bucket = var.s3_bucket
+  bucket = "${var.s3_bucket}-${var.target_env}"
   acl    = "private"
 
   tags   = {
@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "bcgov-parks-reso-public" {
 
 #bucket to hold cloudfront logs
 resource "aws_s3_bucket" "parks-reso-public-logs" {
-  bucket = "parks-reso-public-logs"
+  bucket = "${var.s3_bucket}-logs-${var.target_env}"
   acl    = "private"
 
   tags   = {
