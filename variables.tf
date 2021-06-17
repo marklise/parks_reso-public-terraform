@@ -64,4 +64,5 @@ variable "app_version" {
 variable "domain_name" {
   description = "Domain name for CloudFront distribution"
   type        = string
+  default     = "example.domain.foo"
 }
