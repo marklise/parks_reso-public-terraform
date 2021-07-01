@@ -56,6 +56,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     response_code = 200
     response_page_path = "/index.html"
   }
+
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
@@ -87,6 +88,79 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags = {
     Environment = var.target_env
     Name        = "BC Parks DUP Public"
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
+
+#Distrubtion and bucket for parks assets such as images
+resource "aws_s3_bucket" "bcgov-parks-reso-assets" {
+  bucket = "${var.s3_bucket_assets}-${var.target_env}"
+  acl    = "private"
+
+  tags   = {
+    Name = var.s3_bucket_assets_name
+  }
+}
+
+resource "aws_cloudfront_origin_access_identity" "parks-reso-assets-oai" {
+  comment = "Cloud front OAI for BC Parks reservations assets delivery"
+}
+
+resource "aws_cloudfront_distribution" "s3_assets_distribution" {
+   origin {
+    domain_name = aws_s3_bucket.bcgov-parks-reso-assets.bucket_regional_domain_name
+    origin_id   = "parks-assets-s3-origin"
+    origin_path = "/assets/images"
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.parks-reso-assets-oai.cloudfront_access_identity_path
+    }
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.parks-reso-public-logs.bucket_domain_name
+    prefix          = "logs"
+  }
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "parks-assets-s3-origin"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  price_class = "PriceClass_200"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["US", "CA", "GB", "DE"]
+    }
+  }
+
+  tags = {
+    Environment = var.target_env
+    Name        = "BC Parks DUP Assets"
   }
 
   viewer_certificate {

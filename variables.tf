@@ -35,6 +35,18 @@ variable "s3_bucket_name" {
   default     = "BC Parks Day Pass Public"
 }
 
+variable "s3_bucket_assets" {
+  description = "S3 Bucket containing static web files for CloudFront distribution"
+  type        = string
+  default     = "parks-reso-assets"
+}
+
+variable "s3_bucket_assets_name" {
+  description = "Human readable S3 bucket name for labels"
+  type        = string
+  default     = "BC Parks Day Pass Assets"
+}
+
 variable "s3_origin_id" {
   description = "S3 Origin Id"
   type        = string
