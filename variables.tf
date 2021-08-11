@@ -78,3 +78,21 @@ variable "domain_name" {
   type        = string
   default     = "example.domain.foo"
 }
+
+varaible "api_gateway_domain" {
+  description = "Domain name for the current api gateway endpoint"
+  type        = string
+  default     = "fqp0wgtzjg.execute-api.ca-central-1.amazonaws.com"
+}
+
+variable "api_gateway_origin_id" {
+  description = "Origin id for api gateway"
+  type        = string
+  default     = "api-gateway"
+}
+
+variable "api_gateway_path_pattern" {
+  description = "path for api gateway"
+  type        = string
+  default     = "dev"
+}
