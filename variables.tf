@@ -94,5 +94,5 @@ variable "api_gateway_origin_id" {
 variable "api_gateway_path_pattern" {
   description = "path for api gateway"
   type        = string
-  default     = "dev"
+  default     = "/dev/*"
 }
